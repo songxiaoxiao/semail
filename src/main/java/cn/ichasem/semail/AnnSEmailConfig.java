@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface AnnNiceConfig {
+public @interface AnnSEmailConfig {
     /**
      * 发送类型，QQ or 163
      * @return

@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by LiQian_Nice on 2018/3/13
  */
-public class NiceEmail {
+public class SEmail {
 
     private static Session session;
     private static String  user;
@@ -31,7 +31,7 @@ public class NiceEmail {
 
 
 
-    private NiceEmail(){
+    private SEmail(){
 
     }
 
@@ -80,9 +80,9 @@ public class NiceEmail {
         return props;
     }
 
-    public static NiceEmail inUse(Class c) throws InvocationTargetException, IllegalAccessException {
-        NiceEmail niceEmail=new NiceEmail();
-        AnnNiceConfig config= (AnnNiceConfig) c.getAnnotation(AnnNiceConfig.class);
+    public static SEmail inUse(Class c) throws InvocationTargetException, IllegalAccessException {
+        SEmail niceEmail=new SEmail();
+        AnnSEmailConfig config= (AnnSEmailConfig) c.getAnnotation(AnnSEmailConfig.class);
 
         for (Method method : config.annotationType().getDeclaredMethods()) {
             if (!method.isAccessible()) {
@@ -108,7 +108,7 @@ public class NiceEmail {
             }
         }
         if (type.equals("SMTP_QQ")){
-            config(NiceEmail.SMTP_QQ(),username,password);
+            config(SEmail.SMTP_QQ(),username,password);
         }
         return niceEmail;
 
@@ -122,17 +122,17 @@ public class NiceEmail {
         inUse(c1);
         for(Method m:c1.getDeclaredMethods()){
             //  getDeclaredMethods    including public, protected, default (package) access, and private methods, but excluding inherited methods.
-            AnnNiceEmail uc=m.getAnnotation(AnnNiceEmail.class);
+            AnnSEmail uc=m.getAnnotation(AnnSEmail.class);
             if(uc !=null){
                 System.out.println("Found Use Case:from= "+uc.from()+"subject="+uc.subject()+"to="+uc.to()+"html="+uc.html()+"text="+uc.text());
                 if (uc.html()==null||uc.html().equals("")){
-                    NiceEmail.subject(uc.subject())
+                    SEmail.subject(uc.subject())
                             .from(uc.from())
                             .to(uc.to())
                             .text(uc.text())
                             .send();
                 }else {
-                    NiceEmail.subject(uc.subject())
+                    SEmail.subject(uc.subject())
                             .from(uc.from())
                             .to(uc.to())
                             .html(uc.html())
@@ -166,8 +166,8 @@ public class NiceEmail {
      * @return
      * @throws MessagingException
      */
-    public static NiceEmail subject(String subject) throws MessagingException {
-        NiceEmail niceEmail = new NiceEmail();
+    public static SEmail subject(String subject) throws MessagingException {
+        SEmail niceEmail = new SEmail();
         niceEmail.msg = new MimeMessage(session);
         niceEmail.msg.setSubject(subject);
         return niceEmail;
@@ -180,7 +180,7 @@ public class NiceEmail {
      * @return
      * @throws MessagingException
      */
-    public  NiceEmail from(String nickName) throws MessagingException {
+    public SEmail from(String nickName) throws MessagingException {
         return from(nickName, user);
     }
 
@@ -192,7 +192,7 @@ public class NiceEmail {
      * @return
      * @throws MessagingException
      */
-    public NiceEmail from(String nickName, String from) throws MessagingException {
+    public SEmail from(String nickName, String from) throws MessagingException {
         try {
             nickName = MimeUtility.encodeText(nickName);
         } catch (Exception e) {
@@ -202,28 +202,28 @@ public class NiceEmail {
         return this;
     }
 
-    public NiceEmail to(String to) throws MessagingException {
+    public SEmail to(String to) throws MessagingException {
         return addRecipient(to, Message.RecipientType.TO);
     }
 
-    private NiceEmail addRecipient(String recipient, Message.RecipientType type) throws MessagingException {
+    private SEmail addRecipient(String recipient, Message.RecipientType type) throws MessagingException {
         msg.setRecipients(type, InternetAddress.parse(recipient.replace(";", ",")));
         return this;
     }
 
-    public NiceEmail text(String text) {
+    public SEmail text(String text) {
         this.text = text;
         return this;
     }
 
-    public NiceEmail html(String html) {
+    public SEmail html(String html) {
         this.html = html;
         return this;
     }
 
 
 
-    public NiceEmail verificationCode(int size,String[] type)  {
+    public SEmail verificationCode(int size, String[] type)  {
         /*this.code=null;*/
         this.code = VerificationCode.code(size,type);
         this.text="您的验证码为:"+ code;
@@ -231,12 +231,12 @@ public class NiceEmail {
 
     }
 
-    public NiceEmail attach(File file) throws MessagingException {
+    public SEmail attach(File file) throws MessagingException {
         attachments.add(createAttachment(file, null));
         return this;
     }
 
-    public NiceEmail attach(File file, String fileName) throws MessagingException {
+    public SEmail attach(File file, String fileName) throws MessagingException {
         attachments.add(createAttachment(file, fileName));
         return this;
     }
